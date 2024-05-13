@@ -6,9 +6,10 @@ using UnityEngine.InputSystem;
 
 public class PlayerBlobController : MonoBehaviour
 {
+    public SteerGuide Guide;
+    public float AttractionCoefficient;
     public float Drag;
-
-    Vector2 mMovement;
+    
     Vector2 mSpeed;
 
     void Start()
@@ -23,14 +24,9 @@ public class PlayerBlobController : MonoBehaviour
 
     void OnUpdate(float time)
     {
-        mSpeed += mMovement * time;
+        mSpeed += (Guide.transform.position - transform.position).ToVector2() * AttractionCoefficient * time;
         mSpeed *= 1f - Drag * time;
         
         transform.position += mSpeed.ToVector3() * time;
-    }
-
-    public void HandleMovement(InputAction.CallbackContext context)
-    {
-        mMovement = context.ReadValue<Vector2>();
     }
 }
